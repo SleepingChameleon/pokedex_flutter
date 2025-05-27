@@ -20,7 +20,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _detailsFuture = PokeApi.fetchPokemonByName(widget.pokemon.name);
+    _detailsFuture = PokeApi.fetchPokemonDetails(widget.pokemon.name);
   }
 
   @override
@@ -117,11 +117,10 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
 
                         const SizedBox(height: 16),
                         buildSection("Generation"),
-                        Text(details['generation']['name'].toUpperCase()),
-
-                        const SizedBox(height: 16),
-                        buildSection("Shiny Appearance"),
-                        Image.network(details['sprites']['front_shiny'], height: 100),
+                        Text(
+                          (details['generation']?['name'] ?? 'Unknown').toString().toUpperCase(),
+                          style: const TextStyle(fontSize: 16),
+                        ),
                       ],
                     ),
                   ),

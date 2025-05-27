@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'poke_api.dart';
-
+import 'util_color.dart';
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
@@ -69,7 +69,17 @@ class _SearchScreenState extends State<SearchScreen> {
                   Text("Height: ${pokemonData!['height']}"),
                   Text("Weight: ${pokemonData!['weight']}"),
                   Text("Abilities: ${(pokemonData!['abilities'] as List).map((a) => a['ability']['name']).join(', ')}"),
-                  Text("Moves: ${(pokemonData!['moves'] as List).map((m) => m['move']['name']).take(5).join(', ')}"), // limit if too many
+                  Text("Moves: ${(pokemonData!['moves'] as List).map((m) => m['move']['name']).take(5).join(', ')}"),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8,
+                    children: (pokemonData!['types'] as List)
+                        .map<Widget>((type) => Chip(
+                              label: Text(type['type']['name'].toUpperCase()),
+                              backgroundColor: typeColor(type['type']['name']),
+                            ))
+                        .toList(),
+                  ),
                 ],
               ),
           ],

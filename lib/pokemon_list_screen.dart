@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pokemon.dart';
 import 'poke_api.dart' as poke_api;
-import 'search_screen.dart';
 import 'util_color.dart';
 import 'pokemon_details_screen.dart';
 
@@ -12,23 +11,14 @@ class PokemonListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pokedex"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const SearchScreen()));
-            },
-          )
-        ],
+        title: const Text("Pokedex Information"),
       ),
       body: FutureBuilder<List<Pokemon>>(
         future: poke_api.PokeApi.fetchPokemonList(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final pokemons = snapshot.data!;
-            ListView.builder(
+          return ListView.builder(
               itemCount: pokemons.length,
               itemBuilder: (context, index) {
                 final pokemon = pokemons[index];

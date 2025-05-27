@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pokedex'),
+        title: const Text('Pokémon App'),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
