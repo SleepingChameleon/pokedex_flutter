@@ -80,6 +80,22 @@ class _SearchScreenState extends State<SearchScreen> {
                             ))
                         .toList(),
                   ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Base Experience: ${pokemonData!['base_experience']}",
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Stats:",
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  ...pokemonData!['stats'].map<Widget>(
+                    (stat) => Text(
+                      "${stat['stat']['name'].toUpperCase()}: ${stat['base_stat']}",
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ).toList(),
                 ],
               ),
           ],
