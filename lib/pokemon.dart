@@ -1,4 +1,3 @@
-
 class Pokemon {
   final String name;
   final String url;
@@ -8,6 +7,9 @@ class Pokemon {
   final List<String> abilities;
   final List<String> moves;
   final String imageUrl;
+  final String imageUrlShiny;
+  final String imageUrlFemale;
+  final Map<String, int> stats;
 
   Pokemon({
     required this.name,
@@ -18,6 +20,9 @@ class Pokemon {
     required this.abilities,
     required this.moves,
     required this.imageUrl,
+    required this.imageUrlShiny,
+    required this.imageUrlFemale,
+    required this.stats,
   });
 
   factory Pokemon.fromJson(Map<String, dynamic> json) {
@@ -30,6 +35,12 @@ class Pokemon {
       abilities: List<String>.from(json['abilities'].map((a) => a['ability']['name'])),
       moves: List<String>.from(json['moves'].map((m) => m['move']['name'])),
       imageUrl: json['sprites']['front_default'] ?? '',
+      imageUrlShiny: json['sprites']['front_shiny'] ?? '',
+      imageUrlFemale: json['sprites']['front_female'] ?? '',
+      stats: {
+        for (var stat in json['stats'])
+          stat['stat']['name']: stat['base_stat'],
+      }
     );
   }
 

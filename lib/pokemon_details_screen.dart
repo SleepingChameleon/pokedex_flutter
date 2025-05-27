@@ -16,6 +16,7 @@ class PokemonDetailScreen extends StatefulWidget {
 
 class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
   late Future<Map<String, dynamic>> _detailsFuture;
+  bool _showShiny = false;
 
   @override
   void initState() {
@@ -70,7 +71,48 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
-                        Image.network(widget.pokemon.imageUrl, height: 120),
+                        // Show Pokemon Gender
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (details['sprites']?['front_default'] != null)
+                            Row(
+                              children: [
+                                const Icon(Icons.male, color: Colors.blue,),
+                                const SizedBox(width: 4),
+                              ],
+                            ),
+                            if (details['sprites']?['front_female'] != null)
+                            Row(
+                              children: [
+                                const Icon(Icons.female, color: Colors.pink,),
+                                const SizedBox(width: 4),
+                              ],
+                            )
+                          ],
+                        ),
+                        // Shiny Toggle and Image
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Show Shiny Pokemon"),
+                            Switch(
+                              value: _showShiny,
+                              activeColor: Colors.redAccent,
+                              onChanged: (val) {
+                                setState(() {
+                                  _showShiny = val;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        Image.network(
+                          _showShiny
+                              ? (details['sprites']['front_shiny'] ?? widget.pokemon.imageUrlShiny ?? widget.pokemon.imageUrl)
+                              : (details['sprites']['front_female'] ?? details['sprites']['front_default'] ?? widget.pokemon.imageUrlFemale ?? widget.pokemon.imageUrl),
+                          height: 120,
+                        ),
                         const SizedBox(height: 10),
                         Wrap(
                           spacing: 10,
@@ -89,7 +131,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
 
                         buildSection("Abilities"),
                         ...details['abilities'].map<Widget>((a) =>
-                          Text("• ${a['ability']['name']}", style: const TextStyle(fontSize: 16))
+                          Text("• ${a['ability']['name']}", style: const TextStyle(fontSize: 16, decoration: TextDecoration.none),)
                         ).toList(),
 
                         const SizedBox(height: 16),
@@ -121,6 +163,26 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
                           (details['generation']?['name'] ?? 'Unknown').toString().toUpperCase(),
                           style: const TextStyle(fontSize: 16),
                         ),
+
+                        // Pokemon Version
+                        const SizedBox(height: 16),
+                        buildSection("Versions"),
+                        details['game_indices'] != null && details['game_indices'].isNotEmpty
+                            ? Wrap(
+                                spacing: 8,
+                                children: [
+                                  ...details['game_indices']
+                                      .map<Widget>((gi) => Chip(
+                                            label: Text(
+                                              gi['version']['name'].toString().toUpperCase(),
+                                              style: const TextStyle(color: Colors.white),
+                                            ),
+                                            backgroundColor: Colors.redAccent,
+                                          ))
+                                      .toList()
+                                  ],
+                                )
+                              : const Text("No version data available."),
                       ],
                     ),
                   ),
